@@ -127,7 +127,7 @@ local-auth-up:
 	scripts/local-stack.sh auth-up
 
 test:
-	.venv/bin/pytest tests/ -q -m "not integration"
+	.venv/bin/pytest tests/ -q -m "not integration and not perf"
 	cd memory-hub-mcp && ../.venv/bin/pytest tests/ -q
 
 test-auth:

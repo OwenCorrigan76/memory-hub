@@ -23,8 +23,10 @@ depends_on = None
 
 
 def upgrade() -> None:
+
     """No-op: this revision only rejoins two migration branches."""
 
 
 def downgrade() -> None:
     """No-op: resplitting into two heads requires no schema change."""
+
