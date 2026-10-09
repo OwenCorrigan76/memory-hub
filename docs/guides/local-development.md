@@ -37,6 +37,9 @@ or `make local-auth-up`.
 - Docker Compose or Podman Compose
 - Node.js 20+ and npm when using the Vite development server
 
+The `make local-install` build uses publicly accessible Red Hat UBI images, so
+you do not need to run `docker login` first.
+
 ## Personal edition
 
 Use the personal edition when you need a lightweight, single-user setup:
