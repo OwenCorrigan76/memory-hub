@@ -66,5 +66,7 @@ def record_event(
         event["tenant_id"] = tenant_id
     if metadata:
         event["metadata"] = metadata
-    with suppress(Exception):
+    try:
         logger.info(json.dumps(event, sort_keys=True))
+    except Exception as e:
+        logger.exception(f"Failed to serialize audit event: {e}")

@@ -1,6 +1,6 @@
 .PHONY: help install uninstall dev local-install local-up local-down local-logs local-auth-up check-prereqs test test-integration test-auth \
         deploy-all deploy-db deploy-mcp deploy-auth deploy-ui deploy-tile \
-        migrate clean-mcp clean-auth
+        migrate clean-mcp clean-auth build build-mcp build-auth build-ui
 
 # Default target
 help:

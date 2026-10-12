@@ -290,6 +290,8 @@ for the deployment invariants that apply across all MemoryHub components
 | `MCP_HTTP_PORT` | `8080` | HTTP port |
 | `MCP_HTTP_PATH` | `/mcp/` | HTTP endpoint path |
 | `MCP_LOG_LEVEL` | `INFO` | Logging level |
+| `MEMORYHUB_CORS_ORIGINS` | `*` | CORS origin list (comma-separated); `*` permits all origins |
+| `MEMORYHUB_VALKEY_URL` | unset | Optional Valkey connection URL (`redis://host:port/db`) for session-focus persistence and broadcast notifications. If unset, focus tools work but without persistence; `register_session` succeeds but falls back to pull-only (no push notifications). Format: `redis://memoryhub-valkey.memory-hub-mcp.svc.cluster.local:6379/0` on OpenShift. |
 
 ## Testing
 
