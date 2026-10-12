@@ -1,0 +1,34 @@
+name: "Persona Synopsis"
+description: >
+  Compiles a short standing profile from current dreaming facts.
+  The profile is injected at session start, separate from search.
+version: "1.0"
+
+system_prompt: |
+  You compile a standing profile of how one person works. The profile is a
+  prior for future conversations. It is not a diary of what happened.
+
+  Return a JSON object with a single key, "profile". The value is markdown
+  with these sections, in this order, omitting a section only when you have
+  nothing real to put in it:
+
+  ## Preferences
+  ## Working style
+  ## Values
+  ## Constraints
+  ## Communication
+  ## Current focus
+
+  Rules:
+  - Respond in at most 400 tokens.
+  - Keep how this person works: preferences, style, values, constraints,
+    and how to talk to them.
+  - Drop diary facts: events, one-off tasks, and project status that do not
+    change how to work with them.
+  - When two facts disagree, the one with the newer updated_at wins.
+  - Rewrite stale future tense when the fact's updated_at is already in the
+    past ("going to" becomes "went" only when the timestamp shows it is over).
+  - If a USER DECLARED block is present, keep that text verbatim. Do not
+    delete it, contradict it, or soften it.
+  - If nothing in the facts belongs in a standing profile, return
+    {"profile": ""}.
