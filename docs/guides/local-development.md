@@ -18,7 +18,7 @@ a third product edition.
 | Database | SQLite | PostgreSQL + pgvector | PostgreSQL + pgvector |
 | MCP transport | stdio | Streamable HTTP | Streamable HTTP |
 | Dashboard UI | No | Yes | Yes |
-| Authentication and multi-tenancy | No | Optional local auth; single local stack | Yes |
+| Authentication and multi-tenancy | No | Local API-key auth; single local stack | Yes |
 | MinIO object storage | No | No | Yes |
 | Valkey queues and notifications | No | Optional Compose profile | Yes |
 | Embedding model | Local ONNX model | Not included in the local stack | Cluster model service |
@@ -26,9 +26,10 @@ a third product edition.
 | OpenShift deployment | No | No | Yes |
 
 The local Compose defaults are intended for development only. To override the
-database password or admin keys, export `MEMORYHUB_DB_PASSWORD`,
-`MEMORYHUB_ADMIN_KEY`, or `AUTH_ADMIN_KEY` before running `make local-install`
-or `make local-auth-up`.
+database password, admin keys, or the MCP-to-auth-service key, export
+`MEMORYHUB_DB_PASSWORD`, `MEMORYHUB_ADMIN_KEY`, `AUTH_ADMIN_KEY`, or
+`AUTH_INTERNAL_SERVICE_KEY` before running `make local-install` or
+`make local-auth-up`.
 
 ## Prerequisites
 
@@ -67,8 +68,8 @@ The command:
 1. Creates the root Python environment when needed.
 2. Prepares the MCP and UI build contexts.
 3. Starts PostgreSQL with a persistent named volume.
-4. Runs the Alembic migrations.
-5. Builds and starts the MCP HTTP service.
+4. Runs the core and auth-service Alembic migrations.
+5. Builds and starts the auth service and MCP HTTP service.
 6. Builds and starts the UI BFF and frontend.
 
 The services are available at:
@@ -77,6 +78,7 @@ The services are available at:
 | --- | --- |
 | Dashboard | http://localhost:8080 |
 | MCP | http://localhost:18080/mcp/ |
+| Auth service | http://localhost:18081 |
 | PostgreSQL | localhost:5432 |
 
 After the first setup, use:
@@ -101,13 +103,14 @@ to use your own local API keys:
 cp memory-hub-mcp/dev-users.example.json memory-hub-mcp/dev-users.json
 ```
 
-### Optional local auth service
+### Local auth service
 
-The default local stack does not require OAuth SSO. The dashboard remains
-usable without the auth service, while the Clients panel reports that auth is
-not configured.
+The auth service starts as part of the default local stack. OAuth SSO is not
+configured locally, but the service stores API keys created in the UI and MCP
+validates those keys through the auth service. The file-backed keys in
+`dev-users.example.json` continue to work as a local fallback.
 
-To start the optional auth container:
+If the database and UI are already running and you only need to start auth:
 
 ```bash
 make local-auth-up

@@ -42,7 +42,7 @@ make local-down
 ```
 
 See [`docs/guides/local-development.md`](docs/guides/local-development.md) for
-the Compose, Vite, optional auth-service, and integration-test workflows.
+the Compose, Vite, local auth-service, and integration-test workflows.
 
 ### Cluster edition
 

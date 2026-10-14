@@ -70,15 +70,22 @@ run_migrations() {
         "$REPO_ROOT/.venv/bin/alembic" -c "$REPO_ROOT/alembic.ini" upgrade head
 }
 
+run_auth_migrations() {
+    compose run --rm auth alembic -c alembic.ini upgrade head
+}
+
 start_stack() {
     prepare_contexts
     compose up -d postgres
     wait_for_postgres
     run_migrations
-    compose up -d --build mcp ui
+    compose build auth
+    run_auth_migrations
+    compose up -d --build mcp ui auth
     echo "Local MemoryHub stack is running:"
     echo "  UI:  http://localhost:8080"
     echo "  MCP: http://localhost:18080/mcp/"
+    echo "  Auth: http://localhost:18081"
 }
 
 find_compose
@@ -98,9 +105,9 @@ case "${1:-}" in
         prepare_contexts
         compose up -d postgres
         wait_for_postgres
-        compose --profile auth build auth
-        compose --profile auth run --rm auth alembic -c alembic.ini upgrade head
-        compose --profile auth up -d auth
+        compose build auth
+        run_auth_migrations
+        compose up -d auth
         echo "Local auth service is running at http://localhost:18081"
         ;;
     *)
